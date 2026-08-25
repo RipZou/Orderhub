@@ -1,0 +1,53 @@
+package com.orderhub.controller;
+
+import com.orderhub.domain.Order;
+import com.orderhub.service.OrderService;
+import jakarta.validation.Valid;
+import org.springframework.web.bind.annotation.*;
+
+
+@RestController
+public class OrderController {
+
+    private final OrderService orderService;
+
+    public OrderController(OrderService orderService) {
+        this.orderService = orderService;
+    }
+
+    @PostMapping("/orders")
+    public Order placeOrder(@Valid @RequestBody PlaceOrderRequest request) {
+        return orderService.placeOrder(
+          request.getOrderId(),
+          request.getBuyerId(),
+          request.getProductId(),
+          request.getQuantities()
+        );
+    }
+
+    @GetMapping("/orders/{id}")
+    public Order getOrder(@PathVariable String id) {
+        return orderService.getOrder(id);
+    }
+
+    @PostMapping("/orders/{id}/pay")
+    public Order payOrder(@PathVariable String id) {
+        return orderService.payOrder(id);
+    }
+
+    @PostMapping("/orders/{id}/ship")
+    public Order shipOrder(@PathVariable String id) {
+        return orderService.shipOrder(id);
+    }
+
+    @PostMapping("/orders/{id}/complete")
+    public Order completeOrder(@PathVariable String id) {
+        return orderService.completeOrder(id);
+    }
+
+    @PostMapping("/orders/{id}/cancel")
+    public Order cancelOrder(@PathVariable String id) {
+        return orderService.cancelOrder(id);
+    }
+
+}
