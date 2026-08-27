@@ -20,3 +20,8 @@ logging:
   level:
     root: INFO
     com.orderhub: DEBUG
+
+orderhub:
+  jwt:
+    secret: "change-me-to-a-very-long-random-secret-at-least-32-chars"
+    expiration-ms: 86400000
