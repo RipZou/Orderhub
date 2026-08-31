@@ -1,8 +1,10 @@
 package com.orderhub.controller;
 
 import com.orderhub.domain.Order;
+import com.orderhub.dto.PlaceOrderRequest;
 import com.orderhub.service.OrderService;
 import jakarta.validation.Valid;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -17,9 +19,15 @@ public class OrderController {
 
     @PostMapping("/orders")
     public Order placeOrder(@Valid @RequestBody PlaceOrderRequest request) {
+
+        String buyerId = (String) SecurityContextHolder
+                .getContext()
+                .getAuthentication()
+                .getPrincipal();
+
         return orderService.placeOrder(
           request.getOrderId(),
-          request.getBuyerId(),
+          buyerId,
           request.getProductId(),
           request.getQuantities()
         );

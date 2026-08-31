@@ -1,31 +1,20 @@
-package com.orderhub.controller;
+package com.orderhub.dto;
 
-import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
 
-import java.util.*;
+import java.util.List;
 
 public class PlaceOrderRequest {
 
     @NotBlank
     private String orderId;
 
-    @NotBlank
-    private String buyerId;
-
     @NotEmpty
     private List<String> productId;
 
     @NotEmpty
     private List<Integer> quantities;
-
-
-    public String getBuyerId() {
-        return buyerId;
-    }
-
-    public void setBuyerId(String buyerId) {
-        this.buyerId = buyerId;
-    }
 
     public List<String> getProductId() {
         return productId;

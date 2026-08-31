@@ -1,8 +1,8 @@
-package com.orderhub.controller;
+package com.orderhub.dto;
 
-import jakarta.validation.constraints.*;
-
-import java.util.*;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Positive;
 
 public class PutProductRequest {
 

@@ -1,7 +1,10 @@
 package com.orderhub.controller;
 
-
 import com.orderhub.domain.User;
+import com.orderhub.dto.LoginRequest;
+import com.orderhub.dto.LoginResponse;
+import com.orderhub.dto.RegisterRequest;
+import com.orderhub.dto.UserResponse;
 import com.orderhub.service.AuthService;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,13 +23,15 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public User register(@Valid @RequestBody RigisterRequest request) {
-        return authService.register(
+    public UserResponse register(@Valid @RequestBody RegisterRequest request) {
+        User user = authService.register(
                 request.getId(),
                 request.getEmail(),
                 request.getName(),
                 request.getPassword()
         );
+
+        return new UserResponse(user.getId(), user.getEmail(), user.getName());
     }
 
     @PostMapping("/login")

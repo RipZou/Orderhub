@@ -1,6 +1,7 @@
 package com.orderhub.controller;
 
 import com.orderhub.domain.Product;
+import com.orderhub.dto.PutProductRequest;
 import com.orderhub.service.ProductService;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;

@@ -1,8 +1,8 @@
-package com.orderhub.controller;
+package com.orderhub.dto;
 
 import jakarta.validation.constraints.NotBlank;
 
-public class RigisterRequest {
+public class RegisterRequest {
 
     @NotBlank
     private String id;
@@ -16,40 +16,35 @@ public class RigisterRequest {
     @NotBlank
     private String password;
 
-
-
-    public @NotBlank String getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(@NotBlank String id) {
+    public void setId(String id) {
         this.id = id;
     }
 
-    public @NotBlank String getEmail() {
+    public String getEmail() {
         return email;
     }
 
-    public void setEmail(@NotBlank String email) {
+    public void setEmail(String email) {
         this.email = email;
     }
 
-    public @NotBlank String getName() {
+    public String getName() {
         return name;
     }
 
-    public void setName(@NotBlank String name) {
+    public void setName(String name) {
         this.name = name;
     }
 
-    public @NotBlank String getPassword() {
+    public String getPassword() {
         return password;
     }
 
-    public void setPassword(@NotBlank String password) {
+    public void setPassword(String password) {
         this.password = password;
     }
-
-
-
 }
