@@ -7,6 +7,8 @@ import jakarta.validation.Valid;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 
 @RestController
 public class OrderController {
@@ -56,6 +58,11 @@ public class OrderController {
     @PostMapping("/orders/{id}/cancel")
     public Order cancelOrder(@PathVariable String id) {
         return orderService.cancelOrder(id, currentUserId());
+    }
+
+    @GetMapping("/orders")
+    public List<Order> getMyOrders() {
+        return orderService.getMyOrders(currentUserId());
     }
 
     private String currentUserId() {

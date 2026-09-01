@@ -31,6 +31,9 @@ public class OrderService {
     @Transactional
     public Order placeOrder(String orderId, String buyerId, List<String> productId, List<Integer> quantity) {
 
+        if(OrderRepo.existsById(orderId)) {
+            throw new IllegalStateException("Order already exist");
+        }
 
         if(productId.size() != quantity.size()) throw new IllegalArgumentException("Product type and quantity type don't match");
 
@@ -140,6 +143,11 @@ public class OrderService {
         OrderRepo.save(order);
         return order;
     }
+
+    public List<Order> getMyOrders(String currentUserId) {
+        return OrderRepo.findByBuyerId(currentUserId);
+    }
+
 
     private void assertOrderOwner(Order order, String currentUserId) {
         if(!order.getBuyerId().equals(currentUserId)) {
