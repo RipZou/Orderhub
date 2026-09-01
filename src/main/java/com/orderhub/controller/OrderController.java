@@ -35,27 +35,33 @@ public class OrderController {
 
     @GetMapping("/orders/{id}")
     public Order getOrder(@PathVariable String id) {
-        return orderService.getOrder(id);
+        return orderService.getOrder(id, currentUserId());
     }
 
     @PostMapping("/orders/{id}/pay")
     public Order payOrder(@PathVariable String id) {
-        return orderService.payOrder(id);
+        return orderService.payOrder(id, currentUserId());
     }
 
     @PostMapping("/orders/{id}/ship")
     public Order shipOrder(@PathVariable String id) {
-        return orderService.shipOrder(id);
+        return orderService.shipOrder(id, currentUserId());
     }
 
     @PostMapping("/orders/{id}/complete")
     public Order completeOrder(@PathVariable String id) {
-        return orderService.completeOrder(id);
+        return orderService.completeOrder(id, currentUserId());
     }
 
     @PostMapping("/orders/{id}/cancel")
     public Order cancelOrder(@PathVariable String id) {
-        return orderService.cancelOrder(id);
+        return orderService.cancelOrder(id, currentUserId());
     }
 
+    private String currentUserId() {
+        return (String) SecurityContextHolder
+                .getContext()
+                .getAuthentication()
+                .getPrincipal();
+    }
 }

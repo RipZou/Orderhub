@@ -72,14 +72,18 @@ public class OrderService {
      * @param OrderId
      * @return
      */
-    public Order getOrder(String OrderId) {
+    public Order getOrder(String OrderId, String currentUserId) {
         /**
          * Order order = OrderRepo.findById(orderId)
          *         .orElseThrow(() -> new IllegalArgumentException("Order does not exist!"));
          */
+
         Optional<Order> optional = OrderRepo.findById(OrderId);
         if(optional.isEmpty()) throw new IllegalArgumentException("Order does not exist!");
         Order order = optional.get();
+
+        assertOrderOwner(order, currentUserId);
+
         return order;
     }
 
@@ -90,8 +94,8 @@ public class OrderService {
      * @return
      */
     @Transactional
-    public Order payOrder(String OrderId) {
-        Order order = getOrder(OrderId);
+    public Order payOrder(String OrderId, String currentUserId) {
+        Order order = getOrder(OrderId, currentUserId);
         order.pay();
         OrderRepo.save(order);
         return order;
@@ -104,8 +108,8 @@ public class OrderService {
      * @return
      */
     @Transactional
-    public Order shipOrder(String OrderId) {
-        Order order = getOrder(OrderId);
+    public Order shipOrder(String OrderId, String currentUserId) {
+        Order order = getOrder(OrderId, currentUserId);
         order.ship();
         OrderRepo.save(order);
         return order;
@@ -117,8 +121,8 @@ public class OrderService {
      * @return
      */
     @Transactional
-    public Order completeOrder(String OrderId) {
-        Order order = getOrder(OrderId);
+    public Order completeOrder(String OrderId, String currentUserId) {
+        Order order = getOrder(OrderId, currentUserId);
         order.complete();
         OrderRepo.save(order);
         return order;
@@ -130,14 +134,18 @@ public class OrderService {
      * @return
      */
     @Transactional
-    public Order cancelOrder(String OrderId) {
-        Order order = getOrder(OrderId);
+    public Order cancelOrder(String OrderId, String currentUserId) {
+        Order order = getOrder(OrderId, currentUserId);
         order.cancel();
         OrderRepo.save(order);
         return order;
     }
 
-
+    private void assertOrderOwner(Order order, String currentUserId) {
+        if(!order.getBuyerId().equals(currentUserId)) {
+            throw new org.springframework.security.access.AccessDeniedException("Access denied");
+        }
+    }
 
 
 
