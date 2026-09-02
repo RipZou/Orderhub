@@ -1,17 +1,24 @@
 package com.orderhub.dto;
 
+import com.orderhub.domain.Role;
+
 public class UserResponse {
 
     private String id;
     private String email;
     private String name;
 
+
+
+    private Role role;
+
     public UserResponse() {}
 
-    public UserResponse(String id, String email, String name) {
+    public UserResponse(String id, String email, String name, Role role) {
         this.id = id;
         this.email = email;
         this.name = name;
+        this.role = role;
     }
 
     public String getId() {
@@ -36,5 +43,13 @@ public class UserResponse {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
     }
 }

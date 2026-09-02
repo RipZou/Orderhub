@@ -1,5 +1,6 @@
 package com.orderhub.service;
 
+import com.orderhub.domain.Role;
 import com.orderhub.domain.User;
 import com.orderhub.repository.UserRepository;
 import jakarta.transaction.Transactional;
@@ -29,7 +30,7 @@ public class AuthService {
 
         String passwordHash = passwordEncoder.encode(rawPassword);
 
-        User user = new User(id, email, name, passwordHash);
+        User user = new User(id, email, name, passwordHash, Role.USER);
 
         return userRepository.save(user);
 
@@ -47,7 +48,7 @@ public class AuthService {
             throw new IllegalArgumentException("Invalid email or password");
         }
 
-        return jwtService.generateToken(user.getId());
+        return jwtService.generateToken(user.getId(), user.getRole());
 
 
     }

@@ -1,6 +1,9 @@
 package com.orderhub.controller;
 
 import com.orderhub.domain.Order;
+import com.orderhub.domain.OrderItem;
+import com.orderhub.dto.OrderItemResponse;
+import com.orderhub.dto.OrderResponse;
 import com.orderhub.dto.PlaceOrderRequest;
 import com.orderhub.service.OrderService;
 import jakarta.validation.Valid;
@@ -20,49 +23,68 @@ public class OrderController {
     }
 
     @PostMapping("/orders")
-    public Order placeOrder(@Valid @RequestBody PlaceOrderRequest request) {
+    public OrderResponse placeOrder(@Valid @RequestBody PlaceOrderRequest request) {
 
         String buyerId = (String) SecurityContextHolder
                 .getContext()
                 .getAuthentication()
                 .getPrincipal();
 
-        return orderService.placeOrder(
-          request.getOrderId(),
-          buyerId,
-          request.getProductId(),
-          request.getQuantities()
+        Order order = orderService.placeOrder(
+                request.getOrderId(),
+                buyerId,
+                request.getProductId(),
+                request.getQuantities()
         );
+
+        return toOrderResponse(order);
     }
 
     @GetMapping("/orders/{id}")
-    public Order getOrder(@PathVariable String id) {
-        return orderService.getOrder(id, currentUserId());
+    public OrderResponse getOrder(@PathVariable String id) {
+
+        Order order = orderService.getOrder(id, currentUserId());
+
+        return toOrderResponse(order);
     }
 
     @PostMapping("/orders/{id}/pay")
-    public Order payOrder(@PathVariable String id) {
-        return orderService.payOrder(id, currentUserId());
+    public OrderResponse payOrder(@PathVariable String id) {
+
+        Order order = orderService.payOrder(id, currentUserId());
+
+        return toOrderResponse(order);
     }
 
     @PostMapping("/orders/{id}/ship")
-    public Order shipOrder(@PathVariable String id) {
-        return orderService.shipOrder(id, currentUserId());
+    public OrderResponse shipOrder(@PathVariable String id) {
+
+        Order order = orderService.shipOrder(id, currentUserId());
+
+        return toOrderResponse(order);
     }
 
     @PostMapping("/orders/{id}/complete")
-    public Order completeOrder(@PathVariable String id) {
-        return orderService.completeOrder(id, currentUserId());
+    public OrderResponse completeOrder(@PathVariable String id) {
+
+        Order order = orderService.completeOrder(id, currentUserId());
+
+        return toOrderResponse(order);
     }
 
     @PostMapping("/orders/{id}/cancel")
-    public Order cancelOrder(@PathVariable String id) {
-        return orderService.cancelOrder(id, currentUserId());
+    public OrderResponse cancelOrder(@PathVariable String id) {
+
+        Order order = orderService.cancelOrder(id, currentUserId());
+
+        return toOrderResponse(order);
     }
 
     @GetMapping("/orders")
-    public List<Order> getMyOrders() {
-        return orderService.getMyOrders(currentUserId());
+    public List<OrderResponse> getMyOrders() {
+        return orderService.getMyOrders(currentUserId()).stream()
+                .map(this::toOrderResponse)
+                .toList();
     }
 
     private String currentUserId() {
@@ -70,5 +92,27 @@ public class OrderController {
                 .getContext()
                 .getAuthentication()
                 .getPrincipal();
+    }
+
+    private OrderItemResponse toOrderItemResponse(OrderItem item) {
+        return new OrderItemResponse(
+                item.getProductId(),
+                item.getProductName(),
+                item.getUnitPrice(),
+                item.getQuantity()
+        );
+    }
+
+    private OrderResponse toOrderResponse(Order order) {
+        List<OrderItemResponse> items = order.getItems().stream()
+                .map(this::toOrderItemResponse)
+                .toList();
+
+        return new OrderResponse(
+                order.getOrderId(),
+                order.getBuyerId(),
+                order.getStatus(),
+                items
+        );
     }
 }

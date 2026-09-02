@@ -1,5 +1,6 @@
 package com.orderhub.service;
 
+import com.orderhub.domain.Role;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
@@ -17,12 +18,13 @@ public class JwtService {
     @Value("${orderhub.jwt.expiration-ms}")
     private long expirationMs;
 
-    public String generateToken(String userId) {
+    public String generateToken(String userId, Role role) {
         Date now = new Date();
         Date expiry = new Date(now.getTime() + expirationMs);
 
         return Jwts.builder()
-                .subject(userId)           // 把 userId 放进 token
+                .subject(userId)// 把 userId 放进 token
+                .claim("role", role.name())
                 .issuedAt(now)             // 签发时间
                 .expiration(expiry)        // 过期时间
                 .signWith(getSigningKey()) // 用 secret 签名
@@ -36,6 +38,15 @@ public class JwtService {
                 .parseSignedClaims(token)
                 .getPayload()
                 .getSubject();                 // 就是 generateToken 里的 userId
+    }
+
+    public String extractRole(String token) {
+        return Jwts.parser()
+                .verifyWith(getSigningKey())
+                .build()
+                .parseSignedClaims(token)
+                .getPayload()
+                .get("role", String.class);
     }
 
     public boolean isTokenValid(String token) {

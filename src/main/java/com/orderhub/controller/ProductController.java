@@ -1,6 +1,7 @@
 package com.orderhub.controller;
 
 import com.orderhub.domain.Product;
+import com.orderhub.dto.ProductResponse;
 import com.orderhub.dto.PutProductRequest;
 import com.orderhub.service.ProductService;
 import jakarta.validation.Valid;
@@ -16,13 +17,28 @@ public class ProductController {
     }
 
     @PostMapping("/products")
-    public Product postProduct(@Valid @RequestBody PutProductRequest request) {
-        return productService.postProduct(request.getProductId(), request.getProductName(), request.getProductPrice(), request.getProductStock());
+    public ProductResponse postProduct(@Valid @RequestBody PutProductRequest request) {
+        Product product = productService.postProduct(request.getProductId(), request.getProductName(), request.getProductPrice(), request.getProductStock());
+
+        return new ProductResponse(
+                product.getId(),
+                product.getName(),
+                product.getPrice(),
+                product.getStock()
+        );
     }
 
     @GetMapping("/products/{id}")
-    public Product getProduct(@PathVariable String id) {
-        return productService.getProduct(id);
+    public ProductResponse getProduct(@PathVariable String id) {
+
+        Product product = productService.getProduct(id);
+
+        return new ProductResponse(
+                product.getId(),
+                product.getName(),
+                product.getPrice(),
+                product.getStock()
+        );
     }
 
 }

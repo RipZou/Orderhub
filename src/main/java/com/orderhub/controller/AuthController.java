@@ -31,7 +31,7 @@ public class AuthController {
                 request.getPassword()
         );
 
-        return new UserResponse(user.getId(), user.getEmail(), user.getName());
+        return new UserResponse(user.getId(), user.getEmail(), user.getName(), user.getRole());
     }
 
     @PostMapping("/login")
