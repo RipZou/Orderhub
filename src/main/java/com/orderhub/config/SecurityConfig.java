@@ -39,6 +39,14 @@ public class SecurityConfig {
                                             + request.getRequestURI() + "\"}"
                             );
                         })
+                        .accessDeniedHandler((request, response, accessDeniedException) -> {
+                            response.setStatus(403);
+                            response.setContentType("application/json");
+                            response.getWriter().write(
+                                    "{\"status\":403,\"error\":\"Forbidden\",\"message\":\"Access denied\",\"path\":\""
+                                            + request.getRequestURI() + "\"}"
+                            );
+                        })
                 )
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();

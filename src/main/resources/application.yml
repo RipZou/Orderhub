@@ -1,4 +1,6 @@
 spring:
+  profiles:
+    active: dev
   application:
     name: orderhub
 
@@ -23,5 +25,5 @@ logging:
 
 orderhub:
   jwt:
-    secret: "change-me-to-a-very-long-random-secret-at-least-32-chars"
+    secret: ${ORDERHUB_JWT_SECRET:change-me-to-a-very-long-random-secret-at-least-32-chars}
     expiration-ms: 86400000
