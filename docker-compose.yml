@@ -1,0 +1,21 @@
+services:
+  postgres:
+    image: postgres:16
+    container_name: orderhub-pg
+    environment:
+      POSTGRES_DB: orderhub
+      POSTGRES_USER: orderhub
+      POSTGRES_PASSWORD: orderhub
+    volumes:
+      - orderhub-pg-data:/var/lib/postgresql/data
+    ports:
+      - "5433:5432"
+
+  redis:
+    image: redis:7
+    container_name: orderhub-redis
+    ports:
+      - "6379:6379"
+
+volumes:
+  orderhub-pg-data:

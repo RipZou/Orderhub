@@ -89,7 +89,7 @@ public class AuthServiceTest {
         when(userRepository.findByEmail("a@example.com")).thenReturn(Optional.of(user));
         when(passwordEncoder.matches("password123", "hashed-password")).thenReturn(true);
         when(jwtService.generateToken("u1", Role.USER)).thenReturn("fake-jwt");
-        
+
         String token = authService.login("a@example.com", "password123");
         assertEquals("fake-jwt", token);
         verify(jwtService).generateToken("u1", Role.USER);
