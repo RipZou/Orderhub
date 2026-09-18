@@ -17,5 +17,18 @@ services:
     ports:
       - "6379:6379"
 
+  app:
+    build: .
+    image: orderhub:local
+    container_name: orderhub-app
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+    depends_on:
+      - postgres
+      - redis
+
+
 volumes:
   orderhub-pg-data:
