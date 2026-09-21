@@ -33,3 +33,13 @@ orderhub:
     secret: ${ORDERHUB_JWT_SECRET:change-me-to-a-very-long-random-secret-at-least-32-chars}
     expiration-ms: 86400000
 
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
+  endpoint:
+    health:
+      probes:
+        enabled:true
